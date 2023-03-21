@@ -6,6 +6,11 @@ ENV MYSQL_PASSWORD=mypassword
 ENV MYSQL_ROOT_PASSWORD=rootpassword
 
 COPY my.cnf /etc/mysql/my.cnf
-COPY sql/initDB.sql /docker-entrypoint-initdb.d/
 
-EXPOSE 5040
+
+# Copy SQL scripts
+COPY 01-createTable.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 5140
+
+

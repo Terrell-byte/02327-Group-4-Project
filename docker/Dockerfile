@@ -9,7 +9,7 @@ COPY my.cnf /etc/mysql/my.cnf
 
 
 # Copy SQL scripts
-COPY 01-createTable.sql /docker-entrypoint-initdb.d/
+COPY 4_02327DatabaseScript1_2023.sql /docker-entrypoint-initdb.d/
 
 EXPOSE 5140
 

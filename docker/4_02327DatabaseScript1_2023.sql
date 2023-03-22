@@ -1,17 +1,14 @@
 USE gruppe4;
 
 
-DROP TABLE IF EXISTS PreReq;
-DROP TABLE IF EXISTS TimeSlot;
-DROP TABLE IF EXISTS Advisor;
-DROP TABLE IF EXISTS Takes;
-DROP TABLE IF EXISTS Student;
-DROP TABLE IF EXISTS Teaches;
-DROP TABLE IF EXISTS Section;
-DROP TABLE IF EXISTS Instructor;
-DROP TABLE IF EXISTS Course;
-DROP TABLE IF EXISTS Department;
-DROP TABLE IF EXISTS Classroom;
+DROP TABLE IF EXISTS Phone;
+DROP TABLE IF EXISTS Email;
+DROP TABLE IF EXISTS Journalist;
+DROP TABLE IF EXISTS Reference;
+DROP TABLE IF EXISTS Footage;
+DROP TABLE IF EXISTS Edition;
+DROP TABLE IF EXISTS Topic;
+DROP TABLE IF EXISTS Item;
 
 
 CREATE TABLE Phone (
@@ -32,7 +29,7 @@ CREATE TABLE Journalist (
     Civic varchar(255),
     City varchar(255),
     ZIP varchar(255),
-    Country varchar(255),
+    Country varchar(255)
 );
 
 CREATE TABLE Reference (
@@ -45,23 +42,25 @@ CREATE TABLE Footage (
     Title varchar(255),
     DateShot date,
     DurationLength int,
-    ReportCPR int,
+    ReportCPR int
 );
 
 CREATE TABLE Edition (
     StartDate dateTime,
     EndDate dateTime,
-    HostCPR int,
+    HostCPR int
 );
 
 CREATE TABLE Topic (
    Title varchar(255),
-   Description varchar(255),
+   Description varchar(255)
 );
 
 CREATE TABLE Item (
     DateTimeSlot dateTime,
     Description varchar(255),
     Views int,
-    TopicTitle varchar(255),
+    TopicTitle varchar(255)
 );
+
+

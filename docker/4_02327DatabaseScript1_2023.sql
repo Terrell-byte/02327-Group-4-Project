@@ -12,55 +12,62 @@ DROP TABLE IF EXISTS Item;
 
 
 CREATE TABLE Phone (
-    JournalistCPR int,
-    Phone varchar(255)
+    JournalistCPR char(10) primary key,
+    Phone char(8),
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR)
 );
 
 CREATE TABLE Email (
-    JournalistCPR int,
-    Email varchar(255)
+    JournalistCPR char(10) primary key,
+    Email varchar(40),
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR)
 );
 
 CREATE TABLE Journalist (
-    CPR int,
-    FirstName varchar(255),
-    LastName varchar(255),
-    Address varchar(255),
-    Civic varchar(255),
-    City varchar(255),
-    ZIP varchar(255),
-    Country varchar(255)
+    CPR CHAR(10) primary key,
+    FirstName varchar(20),
+    LastName varchar(20),
+    Address varchar(30),
+    Civic varchar(5),
+    City varchar(20),
+    ZIP char(4),
+    Country char(2)
 );
 
 CREATE TABLE Reference (
-    TopicTitle varchar(255),
-    JournalistCPR int,
-    Role varchar(255)
+    TopicTitle varchar(40),
+    JournalistCPR CHAR(10),
+    Role varchar(20),
+    constraint referenceID primary key(TopicTitle, JournalistCPR),
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR),
+    foreign key (TopicTitle) references Topic(Title)
 );
 
 CREATE TABLE Footage (
-    Title varchar(255),
-    DateShot date,
+    Title varchar(40) Primary key,
+    DateShot date primary key,
     DurationLength int,
-    ReportCPR int
+    ReportCPR CHAR(10),
+    constraint FootageID primary key(Title, DateShot)
 );
 
 CREATE TABLE Edition (
-    StartDate dateTime,
+    StartDate dateTime Primary key,
     EndDate dateTime,
-    HostCPR int
+    HostCPR CHAR(10)
 );
 
 CREATE TABLE Topic (
-   Title varchar(255),
+   Title varchar(40) Primary key,
    Description varchar(255)
 );
 
 CREATE TABLE Item (
-    DateTimeSlot dateTime,
+    DateTimeSlot dateTime primary key,
     Description varchar(255),
     Views int,
-    TopicTitle varchar(255)
+    TopicTitle varchar(40),
+    FOREIGN KEY (Topictitle) references Topic(Title)
 );
 
 

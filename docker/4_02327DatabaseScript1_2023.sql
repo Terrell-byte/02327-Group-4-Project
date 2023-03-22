@@ -1,3 +1,6 @@
+USE gruppe4;
+
+
 DROP TABLE IF EXISTS PreReq;
 DROP TABLE IF EXISTS TimeSlot;
 DROP TABLE IF EXISTS Advisor;
@@ -27,7 +30,7 @@ CREATE TABLE Journalist (
     LastName varchar(255),
     Address varchar(255),
     Civic varchar(255),
-    City varchar(255)
+    City varchar(255),
     ZIP varchar(255),
     Country varchar(255),
 );

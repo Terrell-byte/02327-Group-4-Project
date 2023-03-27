@@ -71,4 +71,29 @@ CREATE TABLE Item (
     FOREIGN KEY (Topictitle) references Topic(Title)
 );
 
+CREATE FUNCTION IsFootageTooLong
+(vTitle VARCHAR(40), vDateShot date, vDurationLength INT)
+RETURNS BOOLEAN
+RETURN vDurationLength > 180;
+
+DELIMITER //
+CREATE TRIGGER Footage_BEFORE_INSERT
+BEFORE INSERT ON Footage FOR EACH ROW
+BEGIN
+IF NEW.DurationLength <= 0
+THEN SIGNAL SQLSTATE 'HY000'
+		SET MYSQL_ERRNO = 1525,
+		MESSAGE_TEXT = 'Duration of footage is equal to/or under 0 seconds';
+	END IF;
+IF IsFootageTooLong(NEW.Title, NEW.DateShot, NEW.DurationLength)
+THEN SIGNAL SQLSTATE 'HY000'
+		SET MYSQL_ERRNO = 1525,
+		MESSAGE_TEXT = 'Duration of footage is over 3 minutes';
+	END IF;
+END//
+DELIMITER ;
+
+    
+	
+
 

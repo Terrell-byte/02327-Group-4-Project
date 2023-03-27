@@ -93,6 +93,45 @@ THEN SIGNAL SQLSTATE 'HY000'
 END//
 DELIMITER ;
 
+CREATE FUNCTION Timeoverlap
+(vStartDate1 dateTime, vEndDate1 dateTime,
+vStartDate2 dateTime, vEndDate2 dateTime)
+RETURNS BOOLEAN
+RETURN ((vstartDate1 <= vStartDate2 AND
+vStartDate2 <= vEndDate1) OR
+(vstartDate2 <= vStartDate1 AND
+vStartDate1 <= vEndDate2));
+
+CREATE FUNCTION IsEditionInvalid
+(vStartDate dateTime, vEndDate dateTime)
+RETURNS BOOLEAN
+RETURN vEndDate <= vStartDate;
+
+DELIMITER //
+CREATE TRIGGER Edition_BEFORE_INSERT
+BEFORE INSERT ON Edition FOR EACH ROW
+	BEGIN
+	SELECT TIMESTAMPDIFF(SECOND, NEW.StartDate, NEW.EndDate) AS Duration;
+	IF IsEditionValid
+		THEN SIGNAL SQLSTATE 'HY000'
+		SET MYSQL_ERRNO = 1525,
+		MESSAGE_TEXT = 'EndDate is equal to or before StartDate';
+		END IF;
+    IF Duration > 1800
+		THEN SIGNAL SQLSTATE 'HY000'
+		SET MYSQL_ERRNO = 1525,
+		MESSAGE_TEXT = 'Edition is too long, exceeds 30 minutes';
+    END IF;
+    IF Timeoverlap
+		THEN SIGNAL SQLSTATE 'HY000'
+		SET MYSQL_ERRNO = 1525,
+		MESSAGE_TEXT = 'Edition is overlapping with another edition';
+    END IF;
+END//
+DELIMITER ;
+
+
+
     
 	
 

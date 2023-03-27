@@ -16,5 +16,5 @@ public class Insert {
             System.out.println(e);
         }
     }
-}
+
 

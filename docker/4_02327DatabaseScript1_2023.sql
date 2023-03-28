@@ -78,7 +78,7 @@ INSERT Journalist VALUES("2501991812", "Maria", "Larsen", "Helsingborgvej", "35"
 INSERT Journalist VALUES("1212681819", "Newt", "McCalister", "Vesterbrogade", "135", "København", "1620", "DK");
 INSERT Journalist VALUES("1806797928", "Pia", "Ludvigsen", "Helsingborgvej", "37", "Silkeborg", "8600", "DK");
 INSERT Journalist VALUES("1703079811", "Rekrut", "Internmand", "Skrotvej", "1", "Tårnby", "2770", "DK");
-INSERT Journalist VALUES("0102694201", "Skipper", "Bent", "Voldboligerne", "2", "København", "1426" "DK");
+INSERT Journalist VALUES("0102694201", "Skipper", "Bent", "Voldboligerne", "2", "København", "1426", "DK");
 
 INSERT Phone VALUES("2501991812", "12345678");
 INSERT Phone VALUES("2501991812", "01234567");
@@ -115,21 +115,21 @@ INSERT Reference VALUES("Paddle Cup Scandal", "1212681819", "Leader");
 INSERT Reference VALUES("Paddle Cup Scandal", "1703079811", "Intern");
 INSERT Reference VALUES("Paddle Cup Scandal", "2501991812", "Advisor");
 
-INSERT Footage VALUES("Bombings in Kiev", "28-03-2023", 126, "2501991812");
-INSERT Footage VALUES("Chocolate mousse seperating", "18-03-2023", 69, "1806797928");
-INSERT Footage VALUES("Man destroying paddlebats", "22-03-2023", 180, "1212681819");
+INSERT Footage VALUES("Bombings in Kiev", "2023-03-28", 126, "2501991812");
+INSERT Footage VALUES("Chocolate mousse seperating", "2023-03-18", 69, "1806797928");
+INSERT Footage VALUES("Man destroying paddlebats", "2023-03-22", 180, "1212681819");
 
-INSERT Edition VALUES("28-03-2023T20:00:00", "28-03-2023T20:27:00", "2501991812");
-INSERT Edition VALUES("28-03-2023T20:30:00", "28-03-2023T20:59:59", "0102694201");
-INSERT Edition VALUES("28-03-2023T21:00:00", "28-03-2023T21:29:59", "1212681819");
-INSERT Edition VALUES("29-03-2023T20:00:00", "28-03-2023T20:29:59", "0102694201");
-INSERT Edition VALUES("29-03-2023T20:30:00", "28-03-2023T20:59:59", "1212681819");
+INSERT Edition VALUES("2023-03-28 20:00:00", "2023-03-28 20:27:00", "2501991812");
+INSERT Edition VALUES("2023-03-28 20:30:00", "2023-03-28 20:59:59", "0102694201");
+INSERT Edition VALUES("2023-03-28 21:00:00", "2023-03-28 21:29:59", "1212681819");
+INSERT Edition VALUES("2023-03-29 20:00:00", "2023-03-29 20:29:59", "0102694201");
+INSERT Edition VALUES("2023-03-29 20:30:00", "2023-03-29 20:59:59", "1212681819");
 
-INSERT Item VALUES("28-03-2023T20:01:30", "This item is about the war in Ukraine", 15000, "War in Ukraine");
-INSERT Item VALUES("28-03-2023T20:31:30", "This item is about the grat bakeoff", 15000, "The great bakeoff");
-INSERT Item VALUES("28-03-2023T20:46:00", "This item is about the President election 2023", 15000, "President election 2023");
-INSERT Item VALUES("29-03-2023T20:01:30", "This item is about the steroid nightmare", 15000, "The steoroid nightmare");
-INSERT Item VALUES("29-03-2023T20:31:30", "This item is about the Paddle Cup Scandal", 15000, "Paddle Cup Scandal");
+INSERT Item VALUES("2023-03-28 20:01:30", "This item is about the war in Ukraine", 15000, "War in Ukraine");
+INSERT Item VALUES("2023-03-28 20:31:30", "This item is about the grat bakeoff", 15000, "The great bakeoff");
+INSERT Item VALUES("2023-03-28 20:46:00", "This item is about the President election 2023", 15000, "President election 2023");
+INSERT Item VALUES("2023-03-29 20:01:30", "This item is about the steroid nightmare", 15000, "The steoroid nightmare");
+INSERT Item VALUES("2023-03-29 20:31:30", "This item is about the Paddle Cup Scandal", 15000, "Paddle Cup Scandal");
 
 
 CREATE FUNCTION IsFootageTooLong
@@ -163,27 +163,46 @@ vStartDate2 <= vEndDate1) OR
 (vstartDate2 <= vStartDate1 AND
 vStartDate1 <= vEndDate2));
 
+DELIMITER //
+CREATE FUNCTION TimeoverlapWithTable
+	(vStartTime DATETIME, vEndTime DATETIME)
+	RETURNS BOOLEAN
+BEGIN
+	DECLARE vCounter INT;
+    SELECT (SELECT * FROM Edition
+    WHERE Timeoverlap(vStartTime, vEndTime,
+    StartTime, EndTime)) INTO vCounter FROM EDITION;
+RETURN vCounter > 0;
+END //
+DELIMITER ;
+
 CREATE FUNCTION IsEditionInvalid
 (vStartDate dateTime, vEndDate dateTime)
 RETURNS BOOLEAN
 RETURN vEndDate <= vStartDate;
 
+CREATE FUNCTION StartEndDiff
+(vStartDate dateTime, vEndDate dateTime)
+RETURNS INT
+RETURN TIMESTAMPDIFF(SECOND, vStartDate, vEndDate);
+
+
 DELIMITER //
 CREATE TRIGGER Edition_BEFORE_INSERT
 BEFORE INSERT ON Edition FOR EACH ROW
 	BEGIN
-	SELECT TIMESTAMPDIFF(SECOND, NEW.StartDate, NEW.EndDate) AS Duration;
-	IF IsEditionValid
+    DECLARE Duration int;
+	IF IsEditionInvalid(NEW.StartDate, NEW.EndDate)
 		THEN SIGNAL SQLSTATE 'HY000'
 		SET MYSQL_ERRNO = 1525,
 		MESSAGE_TEXT = 'EndDate is equal to or before StartDate';
 		END IF;
-    IF Duration > 1800
+    IF StartEndDiff(NEW.Startdate, NEW.EndDate) > 1800
 		THEN SIGNAL SQLSTATE 'HY000'
 		SET MYSQL_ERRNO = 1525,
 		MESSAGE_TEXT = 'Edition is too long, exceeds 30 minutes';
     END IF;
-    IF Timeoverlap
+    IF TimeoverlapWithTable(NEW.StartDate, NEW.EndDate)
 		THEN SIGNAL SQLSTATE 'HY000'
 		SET MYSQL_ERRNO = 1525,
 		MESSAGE_TEXT = 'Edition is overlapping with another edition';

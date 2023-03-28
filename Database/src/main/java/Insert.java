@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.List;
 
 public class Insert {
 
@@ -28,33 +29,37 @@ public class Insert {
         }
     }
 
-    public void insertFootage(String title, Date dateShot, int duration, String reporterCPR) {
+    public void insertFootage(List<FootageAndReporter> footageAndReporterList) {
         try {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO Footage (Title, DateShot, DurationLength, ReporterCPR) VALUES (?, ?, ?, ?)");
-            ps.setString(1, title);
-            ps.setDate(2, dateShot);
-            ps.setInt(3, duration);
-            ps.setString(4, reporterCPR);
-            ps.executeUpdate();
+            for (FootageAndReporter footage : footageAndReporterList) {
+                ps.setString(1, footage.getFootage().getTitle());
+                ps.setObject(2, footage.getFootage().getDate());
+                ps.setInt(3, footage.getFootage().getDuration());
+                ps.setInt(4, footage.getReporter().getCPR());
 
+            }
+            ps.executeUpdate();
           } catch (SQLException e) {
             System.out.println(e);
         }
 
     }
 
-    public void insertJournalist(String CPR, String FirstName, String LastName, String Address, String Civic, String City, String ZIP, String Country) {
+    public void insertJournalist(List<FootageAndReporter> footageAndReporterList) {
         try {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO Journalist (CPR, FirstName, LastName, Address, Civic, City, ZIP, Country) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, CPR);
-            ps.setString(2, FirstName);
-            ps.setString(3, LastName);
-            ps.setString(4, Address);
-            ps.setString(5, Civic);
-            ps.setString(6, City);
-            ps.setString(7, ZIP);
-            ps.setString(8, Country);
-            ps.executeUpdate();
+            for (FootageAndReporter reporter : footageAndReporterList)
+            {
+                ps.setInt(1, reporter.getReporter().getCPR());
+                ps.setString(2, reporter.getReporter().getFirstName());
+                ps.setString(3, reporter.getReporter().getLastName());
+                ps.setString(4, reporter.getReporter().getStreetName());
+                ps.setInt(5, reporter.getReporter().getCivicNumber());
+                ps.setString(6, reporter.getReporter().getCountry());
+                ps.setInt(7, reporter.getReporter().getZIPCode());
+                ps.executeUpdate();
+            }
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -71,9 +76,6 @@ public class Insert {
         }
 
     }
-
-
-
 }
 
 

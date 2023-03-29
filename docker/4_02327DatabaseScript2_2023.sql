@@ -1,11 +1,5 @@
 USE gruppe4;
 
-DROP FUNCTION IF exists IsFootageTooLong;
-CREATE FUNCTION IsFootageTooLong
-(vTitle VARCHAR(40), vDateShot date, vDurationLength INT)
-RETURNS BOOLEAN
-RETURN vDurationLength > 180;
-
 DROP TRIGGER IF exists Footage_BEFORE_INSERT;
 DELIMITER //
 CREATE TRIGGER Footage_BEFORE_INSERT
@@ -16,7 +10,7 @@ THEN SIGNAL SQLSTATE 'HY000'
 		SET MYSQL_ERRNO = 1525,
 		MESSAGE_TEXT = 'Duration of footage is equal to/or under 0 seconds';
 	END IF;
-IF IsFootageTooLong(NEW.Title, NEW.DateShot, NEW.DurationLength)
+IF NEW.DurationLength > 180
 THEN SIGNAL SQLSTATE 'HY000'
 		SET MYSQL_ERRNO = 1525,
 		MESSAGE_TEXT = 'Duration of footage is over 3 minutes';
@@ -84,11 +78,11 @@ BEFORE INSERT ON Edition FOR EACH ROW
 END//
 DELIMITER ;
 
-SELECT * FROM Journalist;
-SELECT * FROM Phone;
-Select * FROM Email;
-SELECT * FROM Topic;
-SELECT * FROM Reference;
-SELECT * FROM Footage;
-SELECT * FROM Edition;
-SELECT * FROM Item;
+INSERT Edition VALUES("2023-04-04 20:32:00", "2023-04-04 21:01:00", "2501991812");
+
+
+SELECT HostCPR, IsEditionInvalid(StartDate, EndDate) AS InvalidEdition FROM Edition; 
+
+INSERT Footage VALUES("too long footage part 2", "2023-02-20", 181, "2603851515");
+INSERT Footage VALUES("too long footage part 3", "2023-02-20", 0, "2603851515");
+INSERT Footage VALUES("Appropriate footage length", "2023-02-20", 159, "2603851515");

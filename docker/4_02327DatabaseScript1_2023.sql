@@ -184,7 +184,6 @@ INSERT Item VALUES
 ("2023-03-31 20:31:30", "This item is the news outro", 6969, "News outro");
 
 
-    
-	
+
 
 

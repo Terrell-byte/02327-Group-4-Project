@@ -18,8 +18,7 @@ CREATE TABLE Journalist (
     Address varchar(30),
     Civic varchar(5),
     City varchar(20),
-    ZIP char(4),
-    Country char(2)
+    ZIP char(4)
 );
 
 CREATE TABLE Phone (
@@ -73,6 +72,7 @@ CREATE TABLE Item (
     TopicTitle varchar(40),
     FOREIGN KEY (Topictitle) references Topic(Title) on delete set null
 );
+
 
 INSERT Journalist VALUES
 ("2501991812", "Maria", "Larsen", "Helsingborgvej", "35", "Silkeborg", "8600", "DK"),
@@ -182,6 +182,7 @@ INSERT Item VALUES
 ("2023-03-30 20:46:00", "This item is about The Lonely Island", 6000, "The Lonely Island splitting up?"),
 ("2023-03-31 20:01:30", "This item is about the DTU Comp. Sci. students", 35000, "DTU Comp. Sci Students on strike?"),
 ("2023-03-31 20:31:30", "This item is the news outro", 6969, "News outro");
+
 
 
 

@@ -1,8 +1,18 @@
 USE gruppe4;
 
-SELECT FirstName, LastName, SUM(Views) AS TotalViews FROM Journalist natural join Edition WHERE HOSTCPR = CPR; 
+SELECT FirstName, LastName, TopicTitle, Roles 
+FROM Ref natural join Journalist 
+WHERE Ref.Roles = 'Leader' AND CPR = JournalistCPR Group by CPR;
 
-SELECT FirstName, LastName, Roles FROM Ref natural join Journalist WHERE Roles = "Researcher" Group by CPR;
+SELECT CPR, FirstName, LastName, EmailAddr, PhoneNr 
+FROM (Journalist natural join Email) Natural join Phone 
+WHERE Email.JournalistCPR = Journalist.CPR AND Phone.JournalistCPR = Journalist.CPR order by LastName;
+
+SELECT TopicTitle, Views, Description FROM Item WHERE Views = (SELECT MIN(Views) FROM Item);
+
+
+
+
 
 SELECT FirstName, LastName FROM Journalist WHERE LastName = "McCalister";
 

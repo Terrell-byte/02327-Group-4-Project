@@ -22,19 +22,17 @@ CREATE TABLE Journalist (
     Country char(2)
 );
 
-SHOW ENGINE INNODB STATUS;
-
 CREATE TABLE Phone (
     JournalistCPR char(10),
     PhoneNr char(8),
     primary key(JournalistCPR, PhoneNr),
-    FOREIGN KEY (JournalistCPR) references Journalist(CPR) on delete set null
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR) on delete cascade
 );
 
 CREATE TABLE Email (
     JournalistCPR char(10),
     EmailAddr varchar(40),
-    FOREIGN KEY (JournalistCPR) references Journalist (CPR) on delete set null,
+    FOREIGN KEY (JournalistCPR) references Journalist (CPR) on delete cascade,
     PRIMARY KEY (JournalistCPR, EmailAddr)
 );
 
@@ -47,8 +45,8 @@ CREATE TABLE Ref (
     TopicTitle varchar(40),
     JournalistCPR CHAR(10),
     Roles varchar(20),
-    FOREIGN KEY (JournalistCPR) references Journalist(CPR) on delete set null,
-    foreign key (TopicTitle) references Topic(Title) on delete set null,
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR),
+    foreign key (TopicTitle) references Topic(Title) on delete cascade,
     primary key(TopicTitle, JournalistCPR)
 );
 
@@ -64,7 +62,7 @@ CREATE TABLE Edition (
     StartDate dateTime Primary key,
     EndDate dateTime,
     HostCPR CHAR(10),
-    Foreign key (HostCPR) references Journalist(CPR) on delete set null
+    Foreign key (HostCPR) references Journalist(CPR)
 );
 
 

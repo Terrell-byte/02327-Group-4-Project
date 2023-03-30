@@ -22,6 +22,7 @@ public class LoaderExample {
 			{
 				Insert connection = new Insert();
 				connection.openConn();
+				connection.createTables();
 				connection.insertFootage(Collections.singletonList((footagesAndReporters.get(i))));
 				connection.insertJournalist(Collections.singletonList(footagesAndReporters.get(i)));
 				connection.closeConn();

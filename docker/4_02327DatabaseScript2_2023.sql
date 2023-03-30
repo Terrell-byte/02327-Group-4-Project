@@ -31,14 +31,14 @@ vStartDate1 <= vEndDate2));
 DROP FUNCTION IF exists TimeoverlapWithTable;
 DELIMITER //
 CREATE FUNCTION TimeoverlapWithTable
-	(vStartTime DATETIME, vEndTime DATETIME)
+	(vStartDate DATETIME, vEndDate DATETIME)
 	RETURNS BOOLEAN
 BEGIN
 	DECLARE vCounter INT;
-    SELECT (SELECT * FROM Edition
-    WHERE Timeoverlap(vStartTime, vEndTime,
-    StartTime, EndTime)) INTO vCounter FROM EDITION;
-RETURN vCounter > 0;
+    SELECT (SELECT HostCPR FROM Edition
+    WHERE Timeoverlap(vStartDate, vEndDate,
+    StartDate, EndDate)) INTO vCounter FROM Edition;
+RETURN vCounter > 0 OR vCounter = NULL;
 END //
 DELIMITER ;
 
@@ -80,8 +80,7 @@ DELIMITER ;
 
 INSERT Edition VALUES("2023-04-04 20:32:00", "2023-04-04 21:01:00", "2501991812");
 
-
-SELECT HostCPR, IsEditionInvalid(StartDate, EndDate) AS InvalidEdition FROM Edition; 
+SELECT HostCPR, TimeoverlapWithTable(StartDate, EndDate) AS timeoverlap FROM Edition;
 
 INSERT Footage VALUES("too long footage part 2", "2023-02-20", 181, "2603851515");
 INSERT Footage VALUES("too long footage part 3", "2023-02-20", 0, "2603851515");

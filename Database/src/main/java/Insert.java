@@ -48,7 +48,7 @@ public class Insert {
 
     public void insertJournalist(List<FootageAndReporter> footageAndReporterList) {
         try {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO Journalist (CPR, FirstName, LastName, Address, Civic, City, ZIP, Country) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Journalist (CPR, FirstName, LastName, Address, Civic, City, ZIP) VALUES (?, ?, ?, ?, ?, ?, ?)");
             for (FootageAndReporter reporter : footageAndReporterList)
             {
                 ps.setInt(1, reporter.getReporter().getCPR());

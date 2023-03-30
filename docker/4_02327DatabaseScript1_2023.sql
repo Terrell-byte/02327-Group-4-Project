@@ -18,8 +18,7 @@ CREATE TABLE Journalist (
     Address varchar(30),
     Civic varchar(5),
     City varchar(20),
-    ZIP char(4),
-    Country char(2)
+    ZIP char(4)
 );
 
 CREATE TABLE Phone (
@@ -74,11 +73,11 @@ CREATE TABLE Item (
     FOREIGN KEY (Topictitle) references Topic(Title)
 );
 
-INSERT Journalist VALUES("2501991812", "Maria", "Larsen", "Helsingborgvej", "35", "Silkeborg", "8600", "DK");
-INSERT Journalist VALUES("1212681819", "Newt", "McCalister", "Vesterbrogade", "135", "København", "1620", "DK");
-INSERT Journalist VALUES("1806797928", "Pia", "Ludvigsen", "Helsingborgvej", "37", "Silkeborg", "8600", "DK");
-INSERT Journalist VALUES("1703079811", "Rekrut", "Internmand", "Skrotvej", "1", "Tårnby", "2770", "DK");
-INSERT Journalist VALUES("0102694201", "Skipper", "Bent", "Voldboligerne", "2", "København", "1426", "DK");
+INSERT Journalist VALUES("2501991812", "Maria", "Larsen", "Helsingborgvej", "35", "Silkeborg", "8600");
+INSERT Journalist VALUES("1212681819", "Newt", "McCalister", "Vesterbrogade", "135", "København", "1620");
+INSERT Journalist VALUES("1806797928", "Pia", "Ludvigsen", "Helsingborgvej", "37", "Silkeborg", "8600");
+INSERT Journalist VALUES("1703079811", "Rekrut", "Internmand", "Skrotvej", "1", "Tårnby", "2770");
+INSERT Journalist VALUES("0102694201", "Skipper", "Bent", "Voldboligerne", "2", "København", "1426");
 
 INSERT Phone VALUES("2501991812", "12345678");
 INSERT Phone VALUES("2501991812", "01234567");

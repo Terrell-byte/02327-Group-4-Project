@@ -15,8 +15,8 @@ public class LoaderExample {
 
 			for(FootageAndReporter footageAndReporter : footagesAndReporters) {
 
-				System.out.println("\tFootage: " + footageAndReporter.getFootage());
-				System.out.println("\tReporter: " + footageAndReporter.getReporter());
+				//System.out.println("\tFootage: " + footageAndReporter.getFootage());
+				//System.out.println("\tReporter: " + footageAndReporter.getReporter());
 			}
 			for (int i = 0; i < footagesAndReporters.size(); i++)
 			{

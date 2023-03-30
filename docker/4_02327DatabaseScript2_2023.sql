@@ -1,5 +1,11 @@
 USE gruppe4;
 
+SELECT FirstName, LastName, SUM(Views) AS TotalViews FROM Journalist natural join Edition WHERE HOSTCPR = CPR; 
+
+SELECT FirstName, LastName, Roles FROM Ref natural join Journalist WHERE Roles = "Researcher" Group by CPR;
+
+SELECT FirstName, LastName FROM Journalist WHERE LastName = "McCalister";
+
 DROP TRIGGER IF exists Footage_BEFORE_INSERT;
 DELIMITER //
 CREATE TRIGGER Footage_BEFORE_INSERT
@@ -77,8 +83,7 @@ BEFORE INSERT ON Edition FOR EACH ROW
 END//
 DELIMITER ;
 
-SELECT HOSTCPR, TimeoverlapWithTable("2023-03-31 20:32:00", "2023-04-04 21:01:00") AS timeoverlap FROM Edition;
-
+INSERT Edition values("2023-03-31 20:15:00", "2023-03-31 22:00:59", "1212681819");
 INSERT Footage VALUES("too long footage part 2", "2023-02-20", 181, "2603851515"); 
 INSERT Footage VALUES("too long footage part 3", "2023-02-20", 0, "2603851515");
 INSERT Footage VALUES("Appropriate footage length", "2023-02-20", 159, "2603851515");

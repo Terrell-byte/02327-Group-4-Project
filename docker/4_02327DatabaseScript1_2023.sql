@@ -4,7 +4,7 @@ USE gruppe4;
 
 DROP TABLE IF EXISTS Phone;
 DROP TABLE IF EXISTS Email;
-DROP TABLE IF EXISTS Reference;
+DROP TABLE IF EXISTS Ref;
 DROP TABLE IF EXISTS Footage;
 DROP TABLE IF EXISTS Edition;
 DROP TABLE IF EXISTS Item;
@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS Topic;
 DROP TABLE IF EXISTS Journalist;
 
 CREATE TABLE Journalist (
-    CPR CHAR(10) primary key,
+    CPR char(10) primary key,
     FirstName varchar(20),
     LastName varchar(20),
     Address varchar(30),
@@ -22,18 +22,20 @@ CREATE TABLE Journalist (
     Country char(2)
 );
 
+SHOW ENGINE INNODB STATUS;
+
 CREATE TABLE Phone (
     JournalistCPR char(10),
     PhoneNr char(8),
-    FOREIGN KEY (JournalistCPR) references Journalist(CPR),
-    CONSTRAINT PhoneID primary key(JournalistCPR, PhoneNr)
+    primary key(JournalistCPR, PhoneNr),
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR) on delete set null
 );
 
 CREATE TABLE Email (
     JournalistCPR char(10),
     EmailAddr varchar(40),
-    FOREIGN KEY (JournalistCPR) references Journalist(CPR),
-    constraint EmailID PRIMARY KEY (JournalistCPR, EmailAddr)
+    FOREIGN KEY (JournalistCPR) references Journalist (CPR) on delete set null,
+    PRIMARY KEY (JournalistCPR, EmailAddr)
 );
 
 CREATE TABLE Topic (
@@ -41,13 +43,13 @@ CREATE TABLE Topic (
    Description varchar(255)
 );
 
-CREATE TABLE Reference (
+CREATE TABLE Ref (
     TopicTitle varchar(40),
     JournalistCPR CHAR(10),
-    Role varchar(20),
-    FOREIGN KEY (JournalistCPR) references Journalist(CPR),
-    foreign key (TopicTitle) references Topic(Title),
-    constraint referenceID primary key(TopicTitle, JournalistCPR)
+    Roles varchar(20),
+    FOREIGN KEY (JournalistCPR) references Journalist(CPR) on delete set null,
+    foreign key (TopicTitle) references Topic(Title) on delete set null,
+    primary key(TopicTitle, JournalistCPR)
 );
 
 CREATE TABLE Footage (
@@ -55,14 +57,14 @@ CREATE TABLE Footage (
     DateShot date,
     DurationLength int,
     ReporterCPR CHAR(10),
-    constraint FootageID primary key(Title, DateShot)
+    primary key(Title, DateShot)
 );
 
 CREATE TABLE Edition (
     StartDate dateTime Primary key,
     EndDate dateTime,
     HostCPR CHAR(10),
-    Foreign key (HostCPR) references Journalist(CPR)
+    Foreign key (HostCPR) references Journalist(CPR) on delete set null
 );
 
 
@@ -71,7 +73,7 @@ CREATE TABLE Item (
     Description varchar(255),
     Views int,
     TopicTitle varchar(40),
-    FOREIGN KEY (Topictitle) references Topic(Title)
+    FOREIGN KEY (Topictitle) references Topic(Title) on delete set null
 );
 
 INSERT Journalist VALUES
@@ -121,14 +123,14 @@ INSERT Topic VALUES
 ("The great bakeoff", "Yet again is the drama wilder than ever in the famous tent"),
 ("President election 2023", "The polling is suggesting that Camacho is in the lead, with 70% over John Cena"),
 ("The steoroid nightmare", "Tons of young people has begun using sterorids in their local gyms, and the staff are aiding them in SATS"),
-("Paddle Cup Scandal", "In a local paddle cup, a man participant has destroyed his own bat and his opponents aswell, after not scoring a single point"),
+("Paddle Cup Scandal", "In a local paddle cup, a male participant has destroyed his own bat and his opponents aswell, after not scoring a single point"),
 ("Incel rebellion", "A group of people, who claim to be incels have gathered around Area 51 to free socalled 'real life anime waifus'."),
 ("Are bananas going extinct?", "Bananas as we now today are clones of original inedible bananas, should the clones go extinct we won't have edible bananas."),
 ("The Lonely Island splitting up?", "The Lonely Island are not splitting up, they are taking a break."),
 ("DTU Comp. Sci Students on strike?", "After further research, it has been concluded that most of the Comp. sci. students are just to lazy to show up for lectures."),
 ("News outro", "News are done for today, come back tommorrow");
 
-INSERT Reference VALUES
+INSERT Ref VALUES
 ("War in Ukraine", "2501991812", "Leader"),
 ("War in Ukraine", "1703079811", "Intern"),
 ("The great bakeoff", "1806797928", "Leader"),

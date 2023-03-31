@@ -18,7 +18,8 @@ CREATE TABLE Journalist (
     Address varchar(30),
     Civic varchar(5),
     City varchar(20),
-    ZIP char(4)
+    ZIP char(4),
+    Country CHAR(2)
 );
 
 CREATE TABLE Phone (

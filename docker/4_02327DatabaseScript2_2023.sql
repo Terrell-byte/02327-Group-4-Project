@@ -4,9 +4,9 @@ SELECT FirstName, LastName, TopicTitle, Roles
 FROM Ref natural join Journalist 
 WHERE Ref.Roles = 'Leader' AND CPR = JournalistCPR Group by CPR;
 
-SELECT CPR, FirstName, LastName, EmailAddr, PhoneNr 
-FROM (Journalist natural join Email) Natural join Phone 
-WHERE Email.JournalistCPR = Journalist.CPR AND Phone.JournalistCPR = Journalist.CPR order by LastName;
+SELECT CPR, FirstName, LastName, COUNT(Edition.HostCPR) AS NrOfTimesHosted
+FROM Journalist join Edition
+WHERE Journalist.CPR = Edition.HostCPR group by CPR Order by NrOfTimesHosted;
 
 SELECT TopicTitle, Views, Description FROM Item WHERE Views = (SELECT MIN(Views) FROM Item);
 

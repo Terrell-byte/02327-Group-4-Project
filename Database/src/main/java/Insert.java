@@ -9,7 +9,7 @@ public class Insert {
     void openConn() {
         String userName = "root";
         String password = "rootpassword";
-        String url = "jdbc:mysql://127.0.0.1:5041/gruppe4";
+        String url = "jdbc:mysql://localhost:3306/gruppe4";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();

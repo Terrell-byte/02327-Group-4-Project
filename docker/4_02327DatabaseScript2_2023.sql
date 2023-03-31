@@ -93,7 +93,10 @@ BEFORE INSERT ON Edition FOR EACH ROW
 END//
 DELIMITER ;
 
-INSERT Edition values("2023-03-31 20:15:00", "2023-03-31 22:00:59", "1212681819");
+INSERT Edition values("2023-03-31 20:15:00", "2023-03-31 20:30:59", "1212681819");
+INSERT Edition Values("2023-04-01 20:15:00", "2023-03-31 20:00:59", "1212681819");
+INSERT Edition Values("2023-04-01 20:00:00", "2023-04-01 20:31:00", "1212681819");
+INSERT Edition Values("2023-04-01 20:00:00", "2023-04-01 20:30:00", "1212681819");
 INSERT Footage VALUES("too long footage part 2", "2023-02-20", 181, "2603851515"); 
 INSERT Footage VALUES("too long footage part 3", "2023-02-20", 0, "2603851515");
 INSERT Footage VALUES("Appropriate footage length", "2023-02-20", 159, "2603851515");

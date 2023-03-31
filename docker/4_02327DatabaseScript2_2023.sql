@@ -100,3 +100,24 @@ INSERT Edition Values("2023-04-01 20:00:00", "2023-04-01 20:30:00", "1212681819"
 INSERT Footage VALUES("too long footage part 2", "2023-02-20", 181, "2603851515"); 
 INSERT Footage VALUES("too long footage part 3", "2023-02-20", 0, "2603851515");
 INSERT Footage VALUES("Appropriate footage length", "2023-02-20", 159, "2603851515");
+
+
+DROP PROCEDURE IF EXISTS SelectAllJournalistEmails;
+DELIMITER //
+CREATE PROCEDURE SelectAllJournalistEmails()
+ BEGIN
+  SELECT EmailAddr FROM Email;
+ END
+//
+DELIMITER ;
+
+DROP VIEW IF EXISTS ContactInfo;
+CREATE VIEW ContactInfo AS
+SELECT FirstName, LastName, EmailAddr, PhoneNr FROM (Journalist NATURAL JOIN Email NATURAL JOIN Phone)
+WHERE Email.JournalistCPR = Journalist.CPR AND Phone.JournalistCPR = Journalist.CPR ORDER BY LastName;
+
+DROP VIEW IF EXISTS MostViewedTopics;
+CREATE VIEW MostViewedTopics AS
+SELECT Topic.Title, Topic.Description, Item.Views FROM Topic
+LEFT JOIN Item ON Item.TopicTitle = Topic.Title
+ORDER BY Views DESC
